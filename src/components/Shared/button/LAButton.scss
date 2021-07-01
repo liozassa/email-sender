@@ -1,0 +1,14 @@
+.la-button {
+    border: 3px solid #4fc3f7;
+    color: #4fc3f7;
+    background-color: white;
+    border-radius: 25px;
+    padding: 1.5vh 2vw;
+
+    &:hover {
+        color: white;
+        font-weight: bold;
+        background-color: #4fc3f7;
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+}

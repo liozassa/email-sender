@@ -1,0 +1,12 @@
+.home {
+    margin: auto;
+
+    .form-control {
+        margin-top: 20px;
+    
+        .invalid-msg {
+            color: red;
+            font-size: 12px;
+        }
+    }
+}
