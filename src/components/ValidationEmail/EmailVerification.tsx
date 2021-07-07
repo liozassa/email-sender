@@ -1,17 +1,18 @@
 import { FC, useState } from 'react';
 import LAButton from '../Shared/button/LAButton';
 import LAInput from '../Shared/Input/LAInput';
-import './Home.scss';
+import './EmailVerification.scss';
 import * as EmailValidator from 'email-validator';
-import { IEmail } from '../../Models/Email.model';
-import { sendEmail } from '../../services/Email.service';
+import { sendActivationEmail } from '../../services/Email.service';
+import { IEmailVerification } from '../../Models/IEmailVerification.model';
 
 interface IStatus {
     sent: boolean | null,
+    validation: boolean | null,
     message: string | null
 }
 
-const Home: FC = () => {
+const EmailVerification: FC = () => {
     const [statusEmail, setStatusEmail] = useState<IStatus>();
     const [enteredEmail, setEnteredEmail] = useState('');
     const [enteredEmailIsValid, setEnteredEmailIsValid] = useState(true);
@@ -21,6 +22,7 @@ const Home: FC = () => {
         setEnteredEmailIsValid(true);
         setStatusEmail({
             sent: null,
+            validation: null,
             message: null
         });
     }
@@ -33,20 +35,25 @@ const Home: FC = () => {
             return;
         }
 
-        const email: IEmail = {
+        const email_verification: IEmailVerification = {
             address: enteredEmail,
-            subject: 'Email Test',
-            message: 'The email server works amazingly!!!'
+            secret: Math.floor(100000 + Math.random() * 900000),
+            activated: false
+
         }
-        const res = await sendEmail(email);
+
+
+        const res = await sendActivationEmail(email_verification);
         if (res.success) {
             setStatusEmail({
                 sent: true,
+                validation: null,
                 message: res.message
             });
         } else {
             setStatusEmail({
                 sent: false,
+                validation: null,
                 message: 'Failed to send email.'
             });
         }
@@ -55,17 +62,21 @@ const Home: FC = () => {
     };
 
     return (
-        <div className="home">
+        <div>
             <div className="title">
-                <h1>Send Email</h1>
+                <h1>Validation Email</h1>
             </div>
             <form onSubmit={formSubmissionHandler}>
                 <div className="form-control">
                     <LAInput type="email" placeholder="Enter your email" onChangeText={emailChangeHandler} value={enteredEmail} invalid={!enteredEmailIsValid}></LAInput>
                     {!enteredEmailIsValid &&  <p className="invalid-msg">Email must not be empty.</p>}
                 </div>
+                {statusEmail?.sent && statusEmail.validation && <div className="form-control">
+                    <LAInput type="email" placeholder="Enter your email" onChangeText={emailChangeHandler} value={enteredEmail} invalid={!enteredEmailIsValid}></LAInput>
+                    {!enteredEmailIsValid &&  <p className="invalid-msg">Email must not be empty.</p>}
+                </div>}
                 <div className="form-control">
-                    <LAButton text="Send Email" type="submit"></LAButton>
+                    <LAButton text="Send Validation Email" type="submit"></LAButton>
                     {statusEmail?.sent &&  <p className={statusEmail.sent ? 'valid-msg' : 'invalid-msg'}>{statusEmail.message}</p>}
                 </div>
             </form>
@@ -73,4 +84,4 @@ const Home: FC = () => {
     );
 }
 
-export default Home;
+export default EmailVerification;

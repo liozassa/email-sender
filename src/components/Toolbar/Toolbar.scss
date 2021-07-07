@@ -1,7 +1,7 @@
 .toolbar {
     display: grid;
-    grid-template-columns: 5vw 20vw auto;
-    grid-template-areas: 'logo app-name .';
+    grid-template-columns: 5vw 20vw auto 10vw 10vw;
+    grid-template-areas: 'logo app-name . send validation';
     align-items: center;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
     height: 100%;
@@ -21,4 +21,29 @@
         justify-self: start;
         font-size: calc(10px + 2vmin);
     }
+
+    .send {
+        grid-area: send;
+    }
+
+    .validation {
+        grid-area: validation;
+    }
+
+    .nav {
+        border: none;
+        font-size: 18px;
+        color: #4fc3f7;
+        font-weight: bold;
+        text-decoration: none;
+
+        &:hover {
+            border-bottom: 2px solid #4fc3f7;
+        }
+
+        &.active {
+            border-bottom: 2px solid #4fc3f7;
+        }
+    }
+
 }
